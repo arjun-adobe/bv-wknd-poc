@@ -2,8 +2,8 @@
 Your project's description...
 
 ## Environments
-- Preview: https://main--edscapstoneajay--ajayajju2412.aem.page/
-- Live: https://main--edscapstoneajay--ajayajju2412.aem.live/
+- Preview: https://main--bv-wknd-poc--arjun-adobe.aem.page/
+- Live: https://main--bv-wknd-poc--arjun-adobe.aem.live/
 
 ## Documentation
 
@@ -31,4 +31,4 @@ npm run lint
 1. Add the [AEM Code Sync GitHub App](https://github.com/apps/aem-code-sync) to the repository
 1. Install the [AEM CLI](https://github.com/adobe/helix-cli): `npm install -g @adobe/aem-cli`
 1. Start AEM Proxy: `aem up` (opens your browser at `http://localhost:3000`)
-1. Open the `edscapstoneajay` directory in your favorite IDE and start coding :)
+1. Open the `bv-wknd-poc` directory in your favorite IDE and start coding :)
