@@ -4,12 +4,16 @@
 //   ... --apply                          create missing entries and publish them
 //   ... --slugs bali-surf-camp,tahoe-skiing   limit to some pages
 //   ... --apply --replace tahoe-skiing   also overwrite an existing entry
+//   ... --source <dir>                   read authored pages from <dir> (.plain.html or .html)
 //
-// Source: content/us/en/adventures/<slug>.plain.html (output of the adventure-detail import).
+// Source: authored adventure pages, by default content/us/en/adventures/<slug>.plain.html
+// (output of the adventure-detail import). Once the live pages are switched over to
+// adventure-detail, those files are generated pages; point --source at a copy of the
+// authored originals instead (backups: DA /drafts/adventures-backup-2026-10-19).
 // Target: /adventures-data/<slug> in DA. Existing entries are never overwritten unless listed in
 // --replace, because authors may have edited them in the form since the last migration.
 import { readFileSync, readdirSync } from 'fs';
-import { dirname, join } from 'path';
+import { dirname, join, resolve } from 'path';
 import { fileURLToPath } from 'url';
 import { convertHtmlToJson, convertJsonToHtml, validationErrors } from './lib/sdk.mjs';
 import { extractAdventure } from './lib/extract-adventure.mjs';
@@ -19,7 +23,6 @@ import {
 } from './lib/da.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const PAGES = join(HERE, '..', '..', 'content', 'us', 'en', 'adventures');
 const FOLDER = '/adventures-data';
 
 const args = process.argv.slice(2);
@@ -30,18 +33,24 @@ const listArg = (name) => {
 };
 const ONLY = listArg('--slugs');
 const REPLACE = new Set(listArg('--replace'));
+const PAGES = resolve(listArg('--source')[0] || join(HERE, '..', '..', 'content', 'us', 'en', 'adventures'));
 
 const schema = JSON.parse(readFileSync(join(HERE, 'adventure.schema.json'), 'utf8'));
-const slugs = readdirSync(PAGES).filter((f) => f.endsWith('.plain.html'))
-  .map((f) => f.replace('.plain.html', ''))
-  .filter((s) => !ONLY.length || ONLY.includes(s))
-  .sort();
+const files = Object.fromEntries(readdirSync(PAGES)
+  .filter((f) => /\.(plain\.)?html$/.test(f))
+  .map((f) => [f.replace(/(\.plain)?\.html$/, ''), f]));
+const slugs = Object.keys(files).filter((s) => !ONLY.length || ONLY.includes(s)).sort();
 
 let failures = 0;
 for (const slug of slugs) {
-  const html = readFileSync(join(PAGES, `${slug}.plain.html`), 'utf8');
-  const json = extractAdventure(html, slug);
+  const html = readFileSync(join(PAGES, files[slug]), 'utf8');
   const path = `${FOLDER}/${slug}`;
+  if (!html.includes('class="tabs"')) {
+    failures += 1;
+    console.log(`${slug}: FAIL not an authored adventure page (already switched over?) - use --source`);
+    continue;
+  }
+  const json = extractAdventure(html, slug);
   const problems = [];
 
   const errors = validationErrors(schema, json);

@@ -28,6 +28,10 @@ node tools/structured-content/migrate-adventures.mjs --apply --slugs bali-surf-c
 node tools/structured-content/check-delivery.mjs
 ```
 
+Since the switch-over, `content/us/en/adventures/` holds the generated pages, not the authored
+originals. To re-run a migration, point `migrate-adventures.mjs --source <dir>` at copies of
+the originals (backed up in DA at `/drafts/adventures-backup-2026-10-19/`).
+
 ## Lessons baked in
 
 - Validate the full `{ metadata, data }` entry, the shape the form editor loads.
