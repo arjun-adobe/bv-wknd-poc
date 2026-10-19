@@ -1,0 +1,200 @@
+{
+  "$defs": {
+    "HeroPhoto": {
+      "type": "object",
+      "title": "Photo",
+      "required": [
+        "url"
+      ],
+      "properties": {
+        "url": {
+          "type": "string",
+          "title": "Image URL",
+          "pattern": "^https://"
+        },
+        "alt": {
+          "type": "string",
+          "title": "Alt text",
+          "maxLength": 200
+        }
+      }
+    },
+    "SectionPhoto": {
+      "type": "object",
+      "title": "Photo (optional)",
+      "properties": {
+        "url": {
+          "type": "string",
+          "title": "Image URL",
+          "pattern": "^https://"
+        },
+        "alt": {
+          "type": "string",
+          "title": "Alt text",
+          "maxLength": 200
+        }
+      }
+    },
+    "Section": {
+      "type": "object",
+      "title": "Section",
+      "properties": {
+        "heading": {
+          "type": "string",
+          "title": "Heading",
+          "maxLength": 120
+        },
+        "paragraphs": {
+          "type": "array",
+          "title": "Paragraphs",
+          "items": {
+            "type": "string",
+            "title": "Paragraph",
+            "x-semantic-type": "long-text"
+          }
+        },
+        "image": {
+          "$ref": "#/$defs/SectionPhoto"
+        },
+        "imagePosition": {
+          "type": "string",
+          "title": "Photo position",
+          "enum": [
+            "Above text",
+            "Below text"
+          ],
+          "default": "Above text"
+        },
+        "list": {
+          "type": "array",
+          "title": "Bullet list",
+          "items": {
+            "type": "string",
+            "title": "Item"
+          }
+        }
+      }
+    }
+  },
+  "type": "object",
+  "title": "Adventure",
+  "required": [
+    "title",
+    "slug",
+    "summary",
+    "activity",
+    "adventureType",
+    "tripLength",
+    "difficulty",
+    "price",
+    "photos"
+  ],
+  "properties": {
+    "title": {
+      "type": "string",
+      "title": "Adventure name",
+      "minLength": 2,
+      "maxLength": 80
+    },
+    "slug": {
+      "type": "string",
+      "title": "Slug (page URL)",
+      "pattern": "^[a-z0-9-]+$",
+      "minLength": 3,
+      "maxLength": 60
+    },
+    "summary": {
+      "type": "string",
+      "title": "Summary (cards & search)",
+      "x-semantic-type": "long-text",
+      "maxLength": 600
+    },
+    "activity": {
+      "type": "string",
+      "title": "Activity",
+      "enum": [
+        "Camping",
+        "Cycling",
+        "Rock Climbing",
+        "Skiing",
+        "Social",
+        "Surfing"
+      ]
+    },
+    "adventureType": {
+      "type": "string",
+      "title": "Adventure type",
+      "enum": [
+        "Day Trip",
+        "Overnight Trip"
+      ],
+      "default": "Overnight Trip"
+    },
+    "tripLength": {
+      "type": "string",
+      "title": "Trip length (e.g. 6 Days, 2-3 Days)",
+      "pattern": "^[0-9]+(-[0-9]+)? [Dd]ays?$"
+    },
+    "groupSize": {
+      "type": "integer",
+      "title": "Group size",
+      "minimum": 1,
+      "maximum": 50
+    },
+    "difficulty": {
+      "type": "string",
+      "title": "Difficulty",
+      "enum": [
+        "Beginner",
+        "Intermediate",
+        "Advanced"
+      ],
+      "default": "Beginner"
+    },
+    "price": {
+      "type": "number",
+      "title": "Price",
+      "minimum": 0
+    },
+    "currency": {
+      "type": "string",
+      "title": "Currency",
+      "enum": [
+        "USD",
+        "EUR",
+        "GBP"
+      ],
+      "default": "USD"
+    },
+    "photos": {
+      "type": "array",
+      "title": "Hero photos (carousel)",
+      "minItems": 1,
+      "maxItems": 6,
+      "items": {
+        "$ref": "#/$defs/HeroPhoto"
+      }
+    },
+    "overview": {
+      "type": "array",
+      "title": "Overview tab",
+      "items": {
+        "$ref": "#/$defs/Section"
+      }
+    },
+    "itinerary": {
+      "type": "array",
+      "title": "Itinerary tab",
+      "items": {
+        "$ref": "#/$defs/Section"
+      }
+    },
+    "whatToBring": {
+      "type": "array",
+      "title": "What to Bring tab",
+      "items": {
+        "$ref": "#/$defs/Section"
+      }
+    }
+  }
+}

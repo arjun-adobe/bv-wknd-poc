@@ -24,14 +24,14 @@ Preview and publish the entry (the form editor's Send → Publish); the page pic
 ### New adventure
 
 1. Create the entry in `/adventures-data/` with the Adventure schema.
-2. Create the page: run `tools/importer/import-adventure-sc.js` with the entry URL (`https://main--bv-wknd-poc--arjun-adobe.aem.page/adventures-data/<slug>`) — it writes the block reference and metadata from the entry.
+2. Create the page: run `tools/importer/import-adventure-sc.js` with the entry URL (`https://main--bv-wknd-poc--arjun-adobe.aem.page/adventures-data/<slug>`) — it writes the block reference, the entry's text and the metadata.
 3. Preview and publish the page.
 
 ## Rendering
 
-Fetches `https://da-sc.adobeaem.workers.dev/{preview|live}/{org}/{site}/adventures-data/<slug>` (live on `.aem.live`, preview elsewhere) and builds the same breadcrumbs, carousel, adventure-meta and tabs blocks an authored adventure page has, so their code and the section layout CSS apply unchanged. If the entry can't be loaded, a short fallback message is shown.
+Fetches `https://da-sc.adobeaem.workers.dev/{preview|live}/{org}/{site}/adventures-data/<slug>` (live on `.aem.live`, preview elsewhere) and builds the same breadcrumbs, carousel, adventure-meta and tabs blocks an authored adventure page has, so their code and the section layout CSS apply unchanged. If the entry can't be loaded, the block shows a short message and the page's plain text (below) stays visible.
 
-Content is rendered client-side: the page HTML carries only the metadata, not the adventure text.
+The page document also carries the entry's text as plain content (title, summary, facts, tab headings, paragraphs and lists) so crawlers that don't run JavaScript see it; the block replaces that section with the rendering from the live entry. After editing an entry, re-run the page import to refresh that text (the rendered page updates without it).
 
 ## Supported variations
 
