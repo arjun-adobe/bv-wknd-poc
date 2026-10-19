@@ -73,8 +73,10 @@ function renderSections(sections = []) {
   sections.forEach((section) => {
     const parts = [];
     if (section.heading) parts.push(el('h3', section.heading));
-    (section.text || '').split(/\n\s*\n/).map((t) => t.trim()).filter(Boolean)
-      .forEach((t) => parts.push(el('p', t)));
+    // paragraphs is a list because line breaks inside one field don't survive
+    // publishing; a legacy single `text` field is still split on blank lines
+    const paragraphs = section.paragraphs || (section.text || '').split(/\n\s*\n/);
+    paragraphs.map((t) => t.trim()).filter(Boolean).forEach((t) => parts.push(el('p', t)));
     const pic = picture(section.image);
     if (pic) {
       const p = el('p');
