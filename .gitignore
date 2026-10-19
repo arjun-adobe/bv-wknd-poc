@@ -20,3 +20,6 @@ migration-work/footer-validation/
 # generated import artifacts (rebuilt from tools/importer/import-*.js sources)
 tools/importer/*.bundle.js
 tools/importer/reports/
+
+# structured content tools: downloaded da-sc-sdk cache
+tools/structured-content/.cache/
