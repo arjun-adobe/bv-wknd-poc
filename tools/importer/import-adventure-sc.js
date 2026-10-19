@@ -20,8 +20,7 @@ const PAGE_TEMPLATE = {
   urls: ['https://main--bv-wknd-poc--arjun-adobe.aem.page/adventures-data/bali-surf-camp'],
 };
 
-// test pages live beside the authored ones until the block ships on main
-const TARGET_FOLDER = '/us/en/adventures-sc';
+const TARGET_FOLDER = '/us/en/adventures';
 const ENTRY_FOLDER = '/adventures-data';
 
 const FACTS = [
