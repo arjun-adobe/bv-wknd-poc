@@ -30,7 +30,7 @@ export function sourceUnits(html) {
   });
 }
 
-/** Units per tab in the order blocks/adventure-detail renders an entry. */
+/** Units per tab in the order scripts/adventure-render.js renders an entry. */
 export function entryUnits(data) {
   return TABS.filter((t) => data[t]?.length).map((t) => data[t].flatMap((s) => {
     const units = s.heading ? [s.heading] : [];

@@ -1,8 +1,0 @@
-/* adventure-detail replaces its own section with the rendered adventure; this
-   only styles the fallback shown when the structured content entry can't load */
-.adventure-detail {
-  max-width: 1136px;
-  margin: 48px auto;
-  padding: 0 32px;
-  color: var(--text-color);
-}

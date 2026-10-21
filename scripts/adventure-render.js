@@ -1,6 +1,5 @@
 /*
- * Adventure rendering, shared by the adventure block (entry rendered at its own
- * URL) and the adventure-detail block (a page that points at an entry).
+ * Adventure rendering for the adventure block (an entry rendered at its own URL).
  *
  * Fetches an Adventure structured content entry as JSON and turns it into the
  * same sections and blocks an authored adventure page has
