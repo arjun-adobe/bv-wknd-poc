@@ -5,6 +5,8 @@
 export const ORG = 'arjun-adobe';
 export const SITE = 'bv-wknd-poc';
 export const REF = 'main';
+// Adventure entries live where their pages are: each entry is the page itself.
+export const ENTRY_FOLDER = '/us/en/adventures';
 
 const DA_ADMIN = 'https://admin.da.live';
 const AEM_ADMIN = 'https://admin.hlx.page';
@@ -44,7 +46,7 @@ export async function listFolder(path) {
   return (await res.json()).filter((e) => e.ext).map((e) => e.name).sort();
 }
 
-/** Preview (and optionally publish) a web path, e.g. /adventures-data/bali-surf-camp. */
+/** Preview (and optionally publish) a web path, e.g. /us/en/adventures/bali-surf-camp. */
 export async function previewAndPublish(webPath, { publish = true } = {}) {
   const run = async (op) => (await fetch(`${AEM_ADMIN}/${op}/${ORG}/${SITE}/${REF}${webPath}`, { method: 'POST' })).status;
   const preview = await run('preview');
