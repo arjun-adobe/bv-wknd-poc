@@ -10,6 +10,7 @@ import {
   loadSections,
   loadCSS,
   buildBlock,
+  toClassName,
 } from './aem.js';
 
 if (window.trustedTypes && window.trustedTypes.createPolicy) {
@@ -152,6 +153,26 @@ function decorateButtons(main) {
 }
 
 /**
+ * A published structured content entry is stored as a da-form block (title,
+ * x-schema-name), a block named after the schema with the top-level fields, and
+ * one sibling block per nested object (photos, sections, ...) referenced as
+ * self://#id. Keep only the schema block (e.g. "adventure"), which renders the
+ * entry from its JSON, and drop the storage blocks before any block code loads.
+ * No-op on regular pages.
+ * @param {Element} main The main element
+ */
+function prepareStructuredContent(main) {
+  const form = main.querySelector(':scope > div > .da-form');
+  if (!form) return;
+  const schemaRow = [...form.children]
+    .find((row) => row.children[0]?.textContent.trim().toLowerCase() === 'x-schema-name');
+  const schema = toClassName(schemaRow?.children[1]?.textContent || '');
+  const entry = schema && form.parentElement.querySelector(`:scope > .${schema}`);
+  if (!entry) return;
+  [...form.parentElement.children].forEach((el) => { if (el !== entry) el.remove(); });
+}
+
+/**
  * The homepage's currently-live authored content is missing a section break
  * between "Recent Articles" and "Next Adventures" (both ended up in one
  * div), so they render as a single section — no gap, and the Featured
@@ -217,6 +238,7 @@ function applySectionMetadata(main) {
  */
 // eslint-disable-next-line import/prefer-default-export
 export function decorateMain(main) {
+  prepareStructuredContent(main);
   splitHomepageSections(main);
   decorateIcons(main);
   buildAutoBlocks(main);
