@@ -7,9 +7,9 @@
 //   ... --source <dir>                   read authored pages from <dir> (.plain.html or .html)
 //
 // Source: authored adventure pages, by default content/us/en/adventures/<slug>.plain.html
-// (output of the adventure-detail import). Once the live pages are switched over to
-// adventure-detail, those files are generated pages; point --source at a copy of the
-// authored originals instead (backups: DA /drafts/adventures-backup-2026-10-19).
+// (output of the adventure-detail template import). Now that the live pages are entries,
+// point --source at a copy of the authored originals instead
+// (backups: DA /drafts/adventures-backup-2026-10-19).
 // Target: /us/en/adventures/<slug> in DA (the entry is the page). Existing documents are
 // never overwritten unless listed in --replace, because authors may have edited them in
 // the form since the last migration. Run refresh-metadata.mjs afterwards for page metadata.

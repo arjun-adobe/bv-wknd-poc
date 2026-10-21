@@ -22,9 +22,6 @@ the trailing slash keeps the `/us/en/adventures` listing page out of the rule).
 | `lib/fidelity.mjs` | Ordered page-vs-entry content comparison (paragraphs, headings, list items, photos). |
 | `lib/da.mjs` | DA / admin / delivery helpers. |
 
-`tools/importer/import-adventure-sc.js` (pages with an `adventure-detail` block pointing at
-an entry stored elsewhere) is only needed for pages that show an entry kept in another folder.
-
 ## Usage
 
 ```sh
