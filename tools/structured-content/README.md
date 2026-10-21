@@ -7,8 +7,8 @@ endpoint; no credentials are stored here (the environment's auth is used).
 Each adventure is **one document**: the structured content entry at
 `/us/en/adventures/<slug>` is the page. It carries an `adventure` block (the schema name),
 which renders the page from the entry's JSON. Authors edit it in the form editor
-(`editor.path` = `/arjun-adobe/bv-wknd-poc/us/en/adventures/=https://da.live/form#`;
-the trailing slash keeps the `/us/en/adventures` listing page out of the rule).
+(`editor.path` = `/arjun-adobe/bv-wknd-poc/us/en/adventures=https://da.live/form#`;
+the `/us/en/adventures` listing page lives in the `/us/en` folder, so it isn't affected).
 
 | File | Purpose |
 |---|---|
@@ -44,4 +44,6 @@ point `--source` at copies of them (backed up in DA at `/drafts/adventures-backu
 - Check content **order**, not just text: a list always renders last in a section.
 - Page metadata can't live in the entry (the form rewrites the document on save); use the
   bulk metadata sheet.
-- `editor.path` matches by plain prefix; end folder rules with `/`.
+- `editor.path` is a plain prefix matched against the **folder being browsed** (no trailing
+  slash), not the clicked document; every document listed in that folder opens with the
+  matched editor. Don't end folder rules with `/`.
