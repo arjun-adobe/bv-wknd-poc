@@ -1,22 +1,13 @@
 /*
  * Adventure rendering for the adventure block (an entry rendered at its own URL).
  *
- * Fetches an Adventure structured content entry as JSON and turns it into the
- * same sections and blocks an authored adventure page has
- * (breadcrumbs | carousel | h1 + adventure-meta + tabs), so the existing block
- * code and section layout CSS apply unchanged.
+ * Turns an Adventure structured content entry into the same sections and blocks
+ * an authored adventure page has (breadcrumbs | carousel | h1 + adventure-meta +
+ * tabs), so the existing block code and section layout CSS apply unchanged.
  */
-import {
-  buildBlock,
-  createOptimizedPicture,
-  decorateBlocks,
-  decorateSections,
-  loadSection,
-} from './aem.js';
+import { buildBlock } from './aem.js';
+import { el, picture, renderEntry } from './structured-content.js';
 
-const SC_ENDPOINT = 'https://da-sc.adobeaem.workers.dev';
-const DEFAULT_ORG = 'arjun-adobe';
-const DEFAULT_SITE = 'bv-wknd-poc';
 const ADVENTURES_PATH = '/us/en/adventures';
 
 const META_ROWS = [
@@ -32,31 +23,6 @@ const TABS = [
   ['Itinerary', 'itinerary'],
   ['What to Bring', 'whatToBring'],
 ];
-
-/**
- * Resolve the structured content JSON URL for an entry path. org/site come from
- * the {ref}--{site}--{org}.aem.(page|live) host; published (live) data is used
- * on .aem.live, preview data everywhere else (aem.page, localhost).
- * @param {string} path entry path, e.g. /us/en/adventures/bali-surf-camp
- * @returns {string} JSON endpoint URL
- */
-function entryUrl(path) {
-  const { hostname } = window.location;
-  const [, site = DEFAULT_SITE, org = DEFAULT_ORG] = hostname.match(/^[^.]+--([^.]+)--([^.]+)\.aem\.(?:page|live)$/) || [];
-  const env = hostname.endsWith('.aem.live') ? 'live' : 'preview';
-  return `${SC_ENDPOINT}/${env}/${org}/${site}${path.replace(/\.html$/, '')}`;
-}
-
-function el(tag, text) {
-  const node = document.createElement(tag);
-  if (text !== undefined) node.textContent = text;
-  return node;
-}
-
-function picture(image, eager = false) {
-  if (!image?.url) return null;
-  return createOptimizedPicture(image.url, image.alt || '', eager);
-}
 
 // keep the authored-page price format (5000.0, 152.59)
 const formatPrice = (price) => (Number.isInteger(price) ? price.toFixed(1) : String(price));
@@ -130,33 +96,5 @@ function buildSections(data) {
  * @param {string} path entry path
  */
 export default async function renderAdventure(block, path) {
-  const section = block.closest('.section');
-
-  let data;
-  try {
-    const resp = await fetch(entryUrl(path));
-    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-    ({ data } = await resp.json());
-  } catch (error) {
-    // eslint-disable-next-line no-console
-    console.error(`adventure: could not load ${path}`, error);
-  }
-  if (!data?.title) {
-    block.textContent = 'This adventure is not available right now.';
-    return;
-  }
-
-  // decorate in a detached container so only the new sections are touched,
-  // then swap them in for this block's section and load their blocks
-  const container = el('div');
-  container.append(...buildSections(data));
-  decorateSections(container);
-  decorateBlocks(container);
-  const sections = [...container.children];
-  if (section) section.replaceWith(...sections);
-  else block.replaceWith(...sections);
-  for (let i = 0; i < sections.length; i += 1) {
-    // eslint-disable-next-line no-await-in-loop
-    await loadSection(sections[i]);
-  }
+  await renderEntry(block, path, buildSections, 'This adventure is not available right now.');
 }

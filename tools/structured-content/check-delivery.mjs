@@ -3,7 +3,7 @@
 // Catches data that changes in delivery (e.g. line breaks collapsed on publish).
 // Documents in the folder that aren't structured content entries are listed and skipped.
 //
-//   node tools/structured-content/check-delivery.mjs [--folder /us/en/adventures]
+//   node tools/structured-content/check-delivery.mjs [--folder /us/en/events --schema event]
 import { readFileSync } from 'fs';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
@@ -15,7 +15,8 @@ import {
 const HERE = dirname(fileURLToPath(import.meta.url));
 const args = process.argv.slice(2);
 const FOLDER = args.includes('--folder') ? args[args.indexOf('--folder') + 1] : ENTRY_FOLDER;
-const schema = JSON.parse(readFileSync(join(HERE, 'adventure.schema.json'), 'utf8'));
+const SCHEMA = args.includes('--schema') ? args[args.indexOf('--schema') + 1] : 'adventure';
+const schema = JSON.parse(readFileSync(join(HERE, `${SCHEMA}.schema.json`), 'utf8'));
 
 let failures = 0;
 let entries = 0;

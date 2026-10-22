@@ -12,11 +12,11 @@ the `/us/en/adventures` listing page lives in the `/us/en` folder, so it isn't a
 
 | File | Purpose |
 |---|---|
-| `adventure.schema.json` | The **Adventure** schema (source of truth for `/.da/forms/schemas/adventure`). |
-| `save-schema.mjs` | Validate the schema with the SDK and save it to DA. Won't overwrite a copy edited in the Schema Editor without `--force`. |
+| `adventure.schema.json`, `event.schema.json` | The **Adventure** and **Event** schemas (source of truth for `/.da/forms/schemas/<name>`). Events live at `/us/en/events/<slug>` and render with the `event` block. |
+| `save-schema.mjs` | Validate a schema with the SDK and save it to DA (`--name event`; default `adventure`). Won't overwrite a copy edited in the Schema Editor without `--force`. |
 | `migrate-adventures.mjs` | Turn authored adventure pages into entries at `/us/en/adventures/<slug>`: validate, check content order against the page, create, publish, verify the published data. Never overwrites an existing document unless listed in `--replace`. |
-| `refresh-metadata.mjs` | Write one exact-URL row per entry page (Title, Description, first photo as Image) to the bulk metadata sheet. The form can't hold page metadata, so re-run after editing an adventure's name, summary or first photo. |
-| `check-delivery.mjs` | For every entry, check the preview and live JSON match what is saved in DA, and that it is valid. `--folder` checks another folder. |
+| `refresh-metadata.mjs` | Write one exact-URL row per entry page (Title, Description = summary, first photo as Image) to the bulk metadata sheet (`--folder /us/en/events`; default adventures). The form can't hold page metadata, so re-run after editing an entry's title, summary or first photo. |
+| `check-delivery.mjs` | For every entry, check the preview and live JSON match what is saved in DA, and that it is valid (`--folder /us/en/events --schema event`). |
 | `lib/sdk.mjs` | Loads Adobe's `da-sc-sdk` (the library the DA form editor uses), pinned to a da-nx commit and checksum-verified, cached in `.cache/`. |
 | `lib/extract-adventure.mjs` | Page → entry mapping. |
 | `lib/fidelity.mjs` | Ordered page-vs-entry content comparison (paragraphs, headings, list items, photos). |

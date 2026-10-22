@@ -1,0 +1,8 @@
+/* event replaces its own section with the rendered event; this only styles the
+   fallback shown when the structured content entry can't load */
+.event {
+  max-width: 1136px;
+  margin: 48px auto;
+  padding: 0 32px;
+  color: var(--text-color);
+}
