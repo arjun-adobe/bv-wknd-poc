@@ -66,3 +66,43 @@ indices:
       lastModified:
         select: none
         value: parseTimestamp(headers['last-modified'], 'ddd, DD MMM YYYY hh:mm:ss GMT')
+
+  # Events index → /events-index.json (feeds the event-cards block on /us/en/events).
+  #
+  # Event pages are structured content entries: title/description/image come from
+  # page metadata (the /metadata sheet), date/city/price/currency straight from the
+  # entry's fields. The form editor renders each field as a row whose key cell holds
+  # an element with the field's id, so `div > div > div:has(#date)` is that row and
+  # its last child the value (the aem.live structured content indexing pattern).
+  # Kept out of helix-sitemap.yaml while events are noindex.
+  events:
+    include:
+      - '/us/en/events/**'
+    exclude:
+      - '/us/en/events'
+    target: /events-index.json
+    properties:
+      title:
+        select: head > meta[property="og:title"]
+        value: attribute(el, 'content')
+      description:
+        select: head > meta[name="description"]
+        value: attribute(el, 'content')
+      image:
+        select: head > meta[property="og:image"]
+        value: attribute(el, 'content')
+      date:
+        select: div > div > div:has(#date) > div:last-child
+        value: textContent(el)
+      city:
+        select: div > div > div:has(#city) > div:last-child
+        value: textContent(el)
+      price:
+        select: div > div > div:has(#price) > div:last-child
+        value: textContent(el)
+      currency:
+        select: div > div > div:has(#currency) > div:last-child
+        value: textContent(el)
+      lastModified:
+        select: none
+        value: parseTimestamp(headers['last-modified'], 'ddd, DD MMM YYYY hh:mm:ss GMT')

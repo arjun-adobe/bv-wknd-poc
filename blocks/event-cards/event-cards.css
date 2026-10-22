@@ -1,0 +1,68 @@
+/* event cards — same grid, border and type scale as adventure-cards */
+.event-cards > ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(257px, 1fr));
+  gap: 24px;
+}
+
+.event-cards > ul > li {
+  border: 1px solid #dadada;
+  background-color: var(--background-color);
+}
+
+.event-cards .event-cards-card-image {
+  display: block;
+  line-height: 0;
+}
+
+.event-cards .event-cards-card-image img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+
+.event-cards .event-cards-card-body {
+  margin: 16px;
+}
+
+/* date · city — small uppercase kicker above the title */
+.event-cards .event-cards-when {
+  margin: 0 0 8px;
+  font-size: var(--body-font-size-xs);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--dark-color);
+}
+
+.event-cards .event-cards-card-body h3 {
+  margin: 0 0 8px;
+  font-family: var(--body-font-family);
+  font-size: var(--body-font-size-m);
+  font-weight: 600;
+  text-transform: uppercase;
+  line-height: 1.2;
+}
+
+.event-cards .event-cards-card-body h3 a:any-link {
+  color: var(--text-color);
+  text-decoration: none;
+}
+
+.event-cards .event-cards-card-body h3 a:hover {
+  color: var(--link-color);
+}
+
+.event-cards .event-cards-price {
+  margin: 0 0 8px;
+  font-weight: 600;
+}
+
+.event-cards .event-cards-description,
+.event-cards .event-cards-empty {
+  margin: 0;
+  font-size: var(--body-font-size-xs);
+}
