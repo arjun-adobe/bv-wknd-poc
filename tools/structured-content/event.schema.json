@@ -1,0 +1,37 @@
+{
+  "$defs": {
+    "Photo": {
+      "type": "object",
+      "title": "Photo",
+      "required": ["url"],
+      "properties": {
+        "url": { "type": "string", "title": "Image URL (from this site)", "pattern": "^https://" },
+        "alt": { "type": "string", "title": "Alt text", "maxLength": 200 }
+      }
+    },
+    "AgendaItem": {
+      "type": "object",
+      "title": "Agenda item",
+      "required": ["title"],
+      "properties": {
+        "time": { "type": "string", "title": "Time (HH:MM)", "format": "time" },
+        "title": { "type": "string", "title": "What happens", "maxLength": 120 },
+        "details": { "type": "string", "title": "Details", "x-semantic-type": "long-text", "maxLength": 600 }
+      }
+    }
+  },
+  "type": "object",
+  "title": "Event",
+  "required": ["title", "date", "summary", "photos"],
+  "properties": {
+    "title": { "type": "string", "title": "Event name", "minLength": 2, "maxLength": 80 },
+    "date": { "type": "string", "title": "Date", "format": "date" },
+    "city": { "type": "string", "title": "City", "enum": ["San Francisco", "Los Angeles", "San Diego", "Portland", "Seattle", "Denver"] },
+    "price": { "type": "number", "title": "Price (0 = free)", "minimum": 0 },
+    "currency": { "type": "string", "title": "Currency", "enum": ["USD", "EUR", "GBP"], "default": "USD" },
+    "summary": { "type": "string", "title": "Summary (cards, search, link previews)", "x-semantic-type": "long-text", "maxLength": 400 },
+    "photos": { "type": "array", "title": "Photos (carousel)", "minItems": 1, "maxItems": 6, "items": { "$ref": "#/$defs/Photo" } },
+    "overview": { "type": "array", "title": "Overview paragraphs", "items": { "type": "string", "title": "Paragraph", "x-semantic-type": "long-text" } },
+    "agenda": { "type": "array", "title": "Agenda", "items": { "$ref": "#/$defs/AgendaItem" } }
+  }
+}

@@ -1,10 +1,12 @@
-// Page metadata for Adventure entry pages. The form editor can't hold page metadata
-// (a metadata block added via canvas# is dropped on the next form save), so each entry
-// page gets one exact-URL row in the bulk metadata sheet (/metadata): Title = name,
-// Description = summary, Image = first hero photo. Re-run after editing those fields.
+// Page metadata for structured content entry pages (adventures, events, ...). The form
+// editor can't hold page metadata (a metadata block added via canvas# is dropped on the
+// next form save), so each entry page gets one exact-URL row in the bulk metadata sheet
+// (/metadata): Title = title, Description = summary, Image = first photo. Re-run after
+// editing those fields.
 //
 //   node tools/structured-content/refresh-metadata.mjs            dry run: show changes
 //   node tools/structured-content/refresh-metadata.mjs --apply    save, preview and publish
+//   ... --folder /us/en/events     another entry folder (default: /us/en/adventures)
 //
 // Rows for other URLs are kept as they are.
 import { convertHtmlToJson } from './lib/sdk.mjs';
@@ -12,17 +14,19 @@ import {
   ENTRY_FOLDER, getSource, listFolder, previewAndPublish, putSource,
 } from './lib/da.mjs';
 
-const APPLY = process.argv.includes('--apply');
+const args = process.argv.slice(2);
+const APPLY = args.includes('--apply');
+const FOLDER = args.includes('--folder') ? args[args.indexOf('--folder') + 1] : ENTRY_FOLDER;
 const SHEET = '/metadata.json';
 const COLUMNS = ['Title', 'Description', 'Image'];
 
 const wanted = [];
-for (const slug of await listFolder(ENTRY_FOLDER)) {
-  const html = await getSource(`${ENTRY_FOLDER}/${slug}.html`);
+for (const slug of await listFolder(FOLDER)) {
+  const html = await getSource(`${FOLDER}/${slug}.html`);
   if (!html.includes('class="da-form"')) continue; // not an entry
   const { data } = convertHtmlToJson({ html }).json;
   wanted.push({
-    URL: `${ENTRY_FOLDER}/${slug}`,
+    URL: `${FOLDER}/${slug}`,
     Title: data.title || '',
     Description: data.summary || '',
     Image: data.photos?.[0]?.url || '',
